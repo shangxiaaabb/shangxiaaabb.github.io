@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IDS97Lzd7uweEA7adjgQuo1V__a3xp9oKGq6OuoxZYg">
+  <meta name="msvalidate.01" content="81407BB95B6B10326AFF04EEC297B4F2">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hjiezero.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="“Why Should I Trust You?” Explaining the Predictions of Any Classifier  trusting a prediction or trusting a model  如果⼀个机器学习模型运⾏良好，为什么我们仅仅信任该模型⽽忽略为什么做出特定的决策呢？诸如分类准确性之类的单⼀指标⽆法完整地描述⼤多数实际任务。当涉及到预测模型时，需要作出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习可解释性--LIME">
+<meta property="og:url" content="https://hjiezero.github.io/posts/cd6f0230/index.html">
+<meta property="og:site_name" content="Hjie">
+<meta property="og:description" content="“Why Should I Trust You?” Explaining the Predictions of Any Classifier  trusting a prediction or trusting a model  如果⼀个机器学习模型运⾏良好，为什么我们仅仅信任该模型⽽忽略为什么做出特定的决策呢？诸如分类准确性之类的单⼀指标⽆法完整地描述⼤多数实际任务。当涉及到预测模型时，需要作出">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/Pm6VexD4KinwA2l.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/05/RqaWkvG7wHSo6jF.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/05/W2h9NPIY1sDdwi6.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/05/srhUdaWXZK1jwgT.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/05/xTNHmRpBsW52Lna.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/05/bE4x2AP1dktK8VZ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/LPuY56g8dC1otTB.png">
+<meta property="article:published_time" content="2023-06-07T02:36:21.000Z">
+<meta property="article:modified_time" content="2024-02-24T12:16:50.601Z">
+<meta property="article:author" content="hjie">
+<meta property="article:tag" content="文献笔记">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="机器学习可解释性">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/06/04/Pm6VexD4KinwA2l.png">
+
+
+<link rel="canonical" href="https://hjiezero.github.io/posts/cd6f0230/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hjiezero.github.io/posts/cd6f0230/","path":"posts/cd6f0230/","title":"机器学习可解释性--LIME"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>机器学习可解释性--LIME | Hjie</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hjie</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-book"><a href="/books" rel="section"><i class="fa fa-book-open fa-fw"></i>book</a></li><li class="menu-item menu-item-link"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">机器学习可解释性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7%E2%80%93LIME"><span class="nav-number">2.</span> <span class="nav-text">机器学习可解释性–LIME</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%A7%A3%E9%87%8A%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">机器学习的解释性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LIME%E5%8E%9F%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">LIME原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LIME%E8%AE%A1%E7%AE%97"><span class="nav-number">2.3.</span> <span class="nav-text">LIME计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%8E%A2%E7%B4%A2"><span class="nav-number">2.3.1.</span> <span class="nav-text">局部探索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%80%E7%96%8F%E7%BA%BF%E6%80%A7%E8%A7%A3%E9%87%8A"><span class="nav-number">2.3.2.</span> <span class="nav-text">稀疏线性解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LIME%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.3.3.</span> <span class="nav-text">LIME步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LIME%E7%9B%B4%E8%A7%82%E8%A7%A3%E9%87%8A"><span class="nav-number">2.4.</span> <span class="nav-text">LIME直观解释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95"><span class="nav-number">2.4.1.</span> <span class="nav-text">1、分类算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB"><span class="nav-number">2.4.2.</span> <span class="nav-text">2、图像识别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LIME%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.5.</span> <span class="nav-text">LIME优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">2.6.</span> <span class="nav-text">推荐阅读</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hjie"
+      src="/images/head.jpg">
+  <p class="site-author-name" itemprop="name">hjie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shangxiaaabb" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shangxiaaabb" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hjie20011001@gmail.com" title="E-Mail → mailto:hjie20011001@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hjiezero.github.io/posts/cd6f0230/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.jpg">
+      <meta itemprop="name" content="hjie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hjie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="机器学习可解释性--LIME | Hjie">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习可解释性--LIME
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-06-07 10:36:21" itemprop="dateCreated datePublished" datetime="2023-06-07T10:36:21+08:00">2023-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-24 20:16:50" itemprop="dateModified" datetime="2024-02-24T20:16:50+08:00">2024-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><center>“Why Should I Trust You?” Explaining the Predictions of Any Classifier</center>
+
+<center>trusting a prediction or trusting a model</center>
+
+<p>如果⼀个机器学习模型运⾏良好，为什么我们仅仅信任该模型⽽忽略为什么做出特定的决策呢？<br>诸如分类准确性之类的单⼀指标⽆法完整地描述⼤多数实际任务。当涉及到预测模型时，需要作出权衡：<strong>你是只想知道预测是什么？</strong>例如，客户流失的概率或某种药物对病⼈的疗效。<strong>还是想知道为什么做出这样的预测？</strong>这种情况下可能为了可解释性付出预测性能下降的代价。在某些情况下，你不必关⼼为什么要做出这样的预测，只要知道模型在测试数据集的预测性能良好就⾜够了。但是在其他情况下，了解 “为什么” 可以帮助你更多地了解问题、数据以及模型可能失败的原因。有些模型可能不需要解释，因为它们是在低风险的环境中使⽤的，这意味着错误不会造成严重后果 (例如，电影推荐系统)，或者该⽅法已经被⼴泛研究和评估 (例如，光学字符识别 OCR)。对可解释性的需求来⾃问题形式化的不完整性，这意味着对于某些问题或任务，仅仅获得预测结果是不够的。该模型还必须解释是怎么获得这个预测的，因为正确的预测只部分地解决了你的原始问题。</p>
+<span id="more"></span>
+
+<h1 id="机器学习可解释性"><a href="#机器学习可解释性" class="headerlink" title="机器学习可解释性"></a>机器学习可解释性</h1><p>需要建立一个解释器来解释黑盒模型，并且这个解释器必须满足以下特征：<br><strong>可解释性</strong><br>要求解释器的模型与特征都必须是可解释的，像决策树、线性模型都是很适合拿来解释的模型；而可解释的模型必须搭配可解释的特征，才是真正的可解释性，让不了解机器学习的人也能通过解释器理解模型。<br><strong>局部保真度</strong><br>既然我们已经使用了可解释的模型与特征，就不可能期望简单的可解释模型在效果上等同于复杂模型（比如原始CNN分类器）。所以解释器不需要在全局上达到复杂模型的效果，但至少在局部上效果要很接近，而此处的局部代表我们想观察的那个样本的周围。<br><strong>与模型无关</strong><br>这里所指的是与复杂模型无关，换句话说无论多复杂的模型，像是SVM或神经网络，该解释器都可以工作。<br>除了传统的特征重要性排序外，ICE、PDP、SDT、LIME、SHAP都是揭开机器学习模型黑箱的有力工具。</p>
+<ul>
+<li>特征重要性计算依据某个特征进行决策树分裂时，分裂前后的信息增益（基尼系数）；</li>
+<li>ICE和PDP考察某项特征的不同取值对模型输出值的影响；</li>
+<li>SDT用单棵决策树解释其它更复杂的机器学习模型；</li>
+<li>LIME的核心思想是对于每条样本，寻找一个更容易解释的代理模型解释原模型；</li>
+<li>SHAP的概念源于博弈论，核心思想是计算特征对模型输出的边际贡献；</li>
+</ul>
+<hr>
+<h1 id="机器学习可解释性–LIME"><a href="#机器学习可解释性–LIME" class="headerlink" title="机器学习可解释性–LIME"></a>机器学习可解释性–LIME</h1><p>[toc]</p>
+<h2 id="机器学习的解释性"><a href="#机器学习的解释性" class="headerlink" title="机器学习的解释性"></a>机器学习的解释性</h2><p>Trusting a prediction, i.e. whether a user trusts an individual prediction sufficiently to take some action based on it, and  trusting a model, i.e. whether the user trusts a model to behave in reasonable ways if deployed.” (Ribeiro 等, 2016, p. 1135)</p>
+<blockquote>
+<p>信任一个预测，即用户是否充分信任一个个体的预测，并在此基础上采取行动；信任一个模型，即用户是否信任一个模型在部署后的行为是否合</p>
+</blockquote>
+<p>LIME, an algorithm that can explain the predictions of any classifier or regressor in a faithful way, by approximating it locally with an interpretable model.” (Ribeiro 等, 2016, p. 1135)</p>
+<blockquote>
+<p>LIME是一种算法，通过用可解释的模型对其进行<strong>局部近似</strong>，可以忠实地解释任何分类器或回归器的预测。</p>
+</blockquote>
+<p>所谓机器学习可解释性就是：我们建立了一个模型预测得到了一个结果，但是你这个<strong>结果真的可以让人信服吗</strong>（从实际生产角度考虑，不从模型的准确率的角度考虑）？这个<strong>模型的影响因素</strong>又是什么呢？如下图<a target="_blank" rel="noopener" href="https://doi.org/10.1145/2939672.2939778">^2</a>：</p>
+<img data-src="https://s2.loli.net/2023/06/04/Pm6VexD4KinwA2l.png" alt="机器学习可解释性--LIME[^2]" style="zoom:60%;"/>
+
+<p>我们通过模型预测流感（flu），通过LIME得到的解释是：喷嚏（sneeze）、头疼（headche）对流感预测是“支持”，而没有疲劳（no fatigue）是“反对”。我们将模型结果交给决策者（human make decision）让她对模型结果做判断。<strong>机器学习</strong>只能作为我们辅助决策的工具，对于实际决策还是依靠<strong>人类</strong>。而我们的决策的依据就是<strong>解释</strong>（explainer），我们根据给出的解释来判别模型是否可作为我们的决策依据。</p>
+<h2 id="LIME原理"><a href="#LIME原理" class="headerlink" title="LIME原理"></a>LIME原理</h2><p><strong>LIME（Local Interpretable Model-agnostic Explanations）</strong>。该模型是一个<strong>局部</strong>可解释模型，并且是一个与模型自身的无关的可解释方法。使用训练的<strong>局部代理模型</strong>来对单个样本进行解释。假设对于需要解释的黑盒模型，取关注的实例样本(<strong>可解释输入$x$</strong>)，在其附近进行扰动生成新的样本点(<strong>生成扰动样本</strong>)，并得到黑盒模型的预测值，使用新的数据集（<strong>扰动样本</strong>）训练可解释的模型（如线性回归、决策树），得到对黑盒模型良好的局部近似<a target="_blank" rel="noopener" href="https://blog.csdn.net/iqdutao/article/details/108397239">^1</a>。</p>
+<p>“The overall goal of LIME is to identify an interpretable model over the interpretable representation that is locally faithful to the classifier.” (Ribeiro 等, 2016, p. 1137)</p>
+<blockquote>
+<p>LIME的总体目标是基于局部可解释性模型 在局部忠实于分类器的可解释表示上识别一个可解释模型。</p>
+</blockquote>
+<p>LIME特点如下：</p>
+<ul>
+<li>Local：局部保证度，即我们希望解释真实反映的分类器</li>
+</ul>
+<h2 id="LIME计算"><a href="#LIME计算" class="headerlink" title="LIME计算"></a>LIME计算</h2><p>假设$f$作为我们需要解释的模型，那么我们定义解释模型$g \in G$ ，$G$作为<strong>解释族函数</strong>（一系列可能的解释模型（线性模型、决策树模型等）），因为并不是每一个$g\in G$都可能是简单到可以解释的，因此定义$\Omega(g)$作为<strong>复杂形测度</strong>，$\pi_{x}$作为实例$z$到$x$之间的邻近度量，从而定义$x$周围的局部性。最后定义$L(f,g,\pi_{x})$作为不忠实$g$在$\pi_{x}$定义的局部中逼近$f$，为了保证<strong>可解释性</strong>和<strong>局部忠实性</strong>计算公式：</p>
+<p>$$<br>\xi(s)&#x3D; argmin_{g\in G} L(f,g,\pi_{x})+\Omega(g)<br>$$</p>
+<h3 id="局部探索"><a href="#局部探索" class="headerlink" title="局部探索"></a>局部探索</h3><p>前面提及到了LIME是一种局部探索可解释模型，那么其局部探索功能如何实现呢？在论文中的 <code>3.3 Sampling for Local Exploration</code>作者给出解释如下：<br>如公式1所示我们需要最小化$L(f,g,\pi_{x})$，我们在$x$周围生成<strong>扰动样本</strong>（perturbed sample）设生成的扰动样本为$Z$，那么我们可以根据我们的$f$对我们所生成的扰动样本进行处理即：$f(Z)$，我们对扰动样本进行加权（距离$x$近的赋予较大权重，反之则较小权重）</p>
+<blockquote>
+<p>“where we sample instances both in the vicinity of $x$ (which have a high weight due to $\pi_{x}$) and far away from x (low weight from $\pi_{x}$).” ([Ribeiro 等, 2016, p. 1137]<br>其中，我们分别在$x$ (由于$\pi_{x}$而具有很高的权重)附近和远离$x$ (来自$\pi_{x}$的低权重)的地方采样实例。</p>
+</blockquote>
+<p>作者在论文中提到即使原始模型（$f$）很难全局进行解释，但是LIME能够在局部进行合理解释</p>
+<blockquote>
+<p>ven though the original model may be too complex to explain globally, LIME presents an explanation that is locally faithful</p>
+</blockquote>
+<h3 id="稀疏线性解释"><a href="#稀疏线性解释" class="headerlink" title="稀疏线性解释"></a>稀疏线性解释</h3><p>论文作者设置解释族函数$G$为线性模型（$g(Z)&#x3D;w_{g}z$），设置$L$为</p>
+<p>$$<br>\underset{z,z^{‘}\in Z}{\sum}\pi_{x}(z)(f(z)-g(z^{‘}))^{2}<br>$$</p>
+<p>$\pi_{x}$为$exp(\frac{-D(x,z)^{2}}{\sigma^{2}})$，上面提及到的扰动样本$Z$，对于扰动样本设计线性函数去对扰动样本进行区分（已分类算法为例）那么我们所赋予的不同的权重$w_{g}$就是不同的样本中不同特征的影响。</p>
+<h3 id="LIME步骤"><a href="#LIME步骤" class="headerlink" title="LIME步骤"></a>LIME步骤</h3><ul>
+<li>对整个数据进行训练，模型可以是Lightgbm，XGBoost等复杂的模型（本身不可解释）;</li>
+<li>选择我们想要解释的变量$x$;</li>
+<li>对数据集中的数据进行可解释的N次扰动，生成扰动样本;</li>
+<li>对这些新的样本求出权重，这个权重是这些数据点与我们要解释的数据之间的距离;</li>
+<li>根据上面新的数据集，拟合一个简单的模型$g$，比如Lasso Regression得到模型的权重;</li>
+<li>通过简单模型$g$来对原复杂模型在$x$点附近进行解释;</li>
+</ul>
+<h2 id="LIME直观解释"><a href="#LIME直观解释" class="headerlink" title="LIME直观解释"></a>LIME直观解释</h2><h3 id="1、分类算法"><a href="#1、分类算法" class="headerlink" title="1、分类算法"></a>1、分类算法</h3><img data-src="https://s2.loli.net/2023/06/05/RqaWkvG7wHSo6jF.png" alt="202306052009422" style="zoom:50%;"/>
+
+<p>如上图不同的颜色块代表不同的类别（蓝色和粉色），很难通过线性模型进行近似。因此输入样本（加重红色×）在其周围生成不同的扰动样本（×和·，其大小代表距离），我们可以对所生成的扰动样本构建线性函数进行区分。具体步骤如下图所示：</p>
+<img data-src="https://s2.loli.net/2023/06/05/W2h9NPIY1sDdwi6.png" alt="202306052008339" style="zoom:60%;"/>
+
+<h3 id="2、图像识别"><a href="#2、图像识别" class="headerlink" title="2、图像识别"></a>2、图像识别</h3><p>在Local Interpretable Model-Agnostic Explanations (LIME): An Introduction<a target="_blank" rel="noopener" href="https://www.oreilly.com/content/introduction-to-local-interpretable-model-agnostic-explanations-lime/">^3</a>中作者对图像识别做出了解释。对一只树蛙进行分类：</p>
+<img data-src="https://s2.loli.net/2023/06/05/srhUdaWXZK1jwgT.png" alt="202306052008339" style="zoom:60%;"/>
+
+<p>将一些可解释的成分 “关闭”（在这种情况下，使它们变成灰色）来生成一组扰乱实例的数据。对于每个被扰乱的实例，我们根据模型得到树蛙在图像中的概率。然后我们在这个数据集上学习一个简单的（线性）模型，这个模型是局部加权的–也就是说，我们更关心在与原始图像更相似的扰动实例中犯错误。最后，我们将具有最高正向权重的超级像素作为解释，而将其他的东西涂成灰色。</p>
+<img data-src="https://s2.loli.net/2023/06/05/xTNHmRpBsW52Lna.png" alt="202306052008339" style="zoom:60%;"/>
+
+<p>我们在任意图像上解释谷歌的 Inception 神经网络。在这种情况下，如下图 所示，分类器将“树蛙”预测为最有可能的类别，其次是概率较低的“台球桌”和“气球”。解释表明分类器主要关注青蛙的脸作为对预测类别的解释。它还阐明了为什么“台球桌”的概率不为零：青蛙的手和眼睛与台球很相似，尤其是在绿色背景下。同样，爱心也很像一个红色的气球。</p>
+<img data-src="https://s2.loli.net/2023/06/05/bE4x2AP1dktK8VZ.png" alt="202306052008339" style="zoom:60%;"/>
+
+<h2 id="LIME优缺点"><a href="#LIME优缺点" class="headerlink" title="LIME优缺点"></a>LIME优缺点</h2><p>1、LIME算法有很强的通用性，效果好。LIME除了能够对图像的分类结果进行解释外，还可以应用到自然语言处理的相关任务中，如主题分类、词性标注等。因为LIME本身的出发点就是模型无关的，具有广泛的适用性。</p>
+<p>2、LIME算法速度慢，LIME在采样完成后，每张采样出来的图片都要通过原模型预测一次结果，所以在速度上没有明显优势。</p>
+<p>3、LIME算法拓展方向，本文的作者在18年新提出了Anchors的方法，指的是复杂模型在局部所呈现出来的很强的规则性的规律，注意和LIME的区别，LIME是在局部建立一个可理解的线性可分模型，而Anchors的目的是建立一套更精细的规则系统。在和文本相关的任务上有不错的表现。有待我们继续研究。</p>
+<p>优点：</p>
+<ul>
+<li>表格型数据、文本和图片均适用；</li>
+<li>解释对人友好，容易明白；</li>
+<li>给出一个忠诚性度量，判断可解释模型是否可靠；</li>
+<li>LIME可以使用原模型所用不到的一些特征数据，比如文本中一个词是否出现。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>表格型数据中，相邻点很难定义，需要尝试不同的kernel来看LIME给出的可解释是否合理；</li>
+<li>扰动时，样本服从高斯分布，忽视了特征之间的相关性；</li>
+<li>稳定性不够好，重复同样的操作，扰动生成的样本不同，给出的解释可能会差别很大。</li>
+</ul>
+<h2 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h2><p><a href="http://hjiezero.github.io/posts/32fedbdb/">http://hjiezero.github.io/posts/32fedbdb/</a></p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>Python库<a target="_blank" rel="noopener" href="https://github.com/marcotcr/lime">LIME</a>提供了实现模型解释的接口，按数据类型分为表格(LimeTabularExplainer), 图像(LimeImageExplainer) 和文本(LimeTextExplainer)<br>创建LimeTabularExplainer 类<a target="_blank" rel="noopener" href="https://e0hyl.github.io/BLOG-OF-E0/LIMEandSHAP/">^4</a></p>
+<ul>
+<li>必要参数是 <code>training_data</code>,因为采样时会依照训练数据的分布，类型是 <code>numpy</code> 二维数组；</li>
+<li><code>feature_names</code> 和 <code>class_names</code> 分别是特征和类别的名字（字符串）；</li>
+<li>由于类别数据和数值数据的处理方式不同，需要把对应的特征编号传入参数 <code>categorical_features</code> 中；</li>
+<li>mode 参数代表任务的类型，可选分类（<code>classification</code>）或回归（<code>regression</code>）。</li>
+</ul>
+<p>解释单个样本：调用该类的 <code>explain_instance</code> 方法，返回 <code>Explanation</code> 对象</p>
+<ul>
+<li>必要参数 <code>data_row</code>：待解释的样本（一维 <code>numpy</code>数组）；</li>
+<li>必要参数 <code>predict_fn</code>，用于预测的函数（对分类任务而言，输入 <code>numpy</code>数组，输出预测概率值，例如 <code>sklearn</code>的分类器的 <code>predict_proba</code>）;</li>
+<li><code>num_features</code>表示解释结果中最多能呈现的特征数量；</li>
+<li><code>distance_metric</code>默认的是 euclidean。<br>返回的 Explanation 有</li>
+<li><code>as_map</code>方法：返回字典类型，标签 -&gt; 元组（特征id，权重）的列表</li>
+<li><code>local_pred</code>属性：字典类型，类别标签 -&gt; 概率</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from lime.lime_tabular import LimeTabularExplainer</span><br><span class="line">lime_explainer = LimeTabularExplainer(</span><br><span class="line">    x_train, #输入训练数据</span><br><span class="line">    feature_names=list(data_bs.columns[4:]), #特征</span><br><span class="line">    mode =&#x27;regression&#x27;, #处理类型</span><br><span class="line">    class_names=[&#x27;AQI&#x27;] #标签)</span><br><span class="line"></span><br><span class="line">exp = lime_explainer.explain_instance(</span><br><span class="line">    data_row=x_test[0], #处理数据：选择不同数据得到图不一样</span><br><span class="line">    predict_fn=mlp.predict #预测函数)</span><br><span class="line"></span><br><span class="line">#exp.show_in_notebook(show_table=True)</span><br><span class="line">exp.as_pyplot_figure()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img data-src="https://s2.loli.net/2023/06/07/LPuY56g8dC1otTB.png" alt="202306071525633" style="zoom:60%;"/>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>1.<a target="_blank" rel="noopener" href="https://blog.csdn.net/iqdutao/article/details/1083972">https://blog.csdn.net/iqdutao/article/details/1083972</a></p>
+<p>2.<a target="_blank" rel="noopener" href="https://doi.org/10.1145/2939672.2939778">https://doi.org/10.1145/2939672.2939778</a></p>
+<p>3.<a target="_blank" rel="noopener" href="https://www.oreilly.com/content/introduction-to-local-interpretable-model-agnostic-explanations-lime/">https://www.oreilly.com/content/introduction-to-local-interpretable-model-agnostic-explanations-lime/</a></p>
+<p>4.<a target="_blank" rel="noopener" href="https://e0hyl.github.io/BLOG-OF-E0/LIMEandSHAP/">https://e0hyl.github.io/BLOG-OF-E0/LIMEandSHAP/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0/" rel="tag"># 文献笔记</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7/" rel="tag"># 机器学习可解释性</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/undefined/" rel="next" title="Hello World">
+                  Hello World <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hjie</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/code-unfold.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.11/pdfobject.min.js","integrity":"sha256-N6JtCNwaYm6kizuG92UtOOXamRHPwu+V1yF10g3bu/c="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

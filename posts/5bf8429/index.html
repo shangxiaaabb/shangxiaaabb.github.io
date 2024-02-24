@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IDS97Lzd7uweEA7adjgQuo1V__a3xp9oKGq6OuoxZYg">
+  <meta name="msvalidate.01" content="81407BB95B6B10326AFF04EEC297B4F2">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hjiezero.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="A Unified Approach to Interpreting Model Predictions  trusting a prediction or trusting a model  如果⼀个机器学习模型运⾏良好，为什么我们仅仅信任该模型⽽忽略为什么做出特定的决策呢？诸如分类准确性之类的单⼀指标⽆法完整地描述⼤多数实际任务。当涉及到预测模型时，需要作出权衡：你是只想知道预测是什么？例如，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习可解释性--SHAP">
+<meta property="og:url" content="https://hjiezero.github.io/posts/5bf8429/index.html">
+<meta property="og:site_name" content="Hjie">
+<meta property="og:description" content="A Unified Approach to Interpreting Model Predictions  trusting a prediction or trusting a model  如果⼀个机器学习模型运⾏良好，为什么我们仅仅信任该模型⽽忽略为什么做出特定的决策呢？诸如分类准确性之类的单⼀指标⽆法完整地描述⼤多数实际任务。当涉及到预测模型时，需要作出权衡：你是只想知道预测是什么？例如，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/06/07/cgknwhxlI9uJT4H.png">
+<meta property="og:image" content="https://pica.zhimg.com/450be1b5a2d5196399f6665086a728d2_r.jpg?source=1940ef5c">
+<meta property="og:image" content="https://s2.loli.net/2023/06/08/LFq8k1WHQsghB4P.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/08/g3nWKHrlfB5Z79T.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/09/k5NbE3TvQuFtP92.png">
+<meta property="article:published_time" content="2024-02-24T12:16:50.679Z">
+<meta property="article:modified_time" content="2024-02-24T12:16:50.695Z">
+<meta property="article:author" content="hjie">
+<meta property="article:tag" content="文献笔记">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="机器学习可解释性">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/06/07/cgknwhxlI9uJT4H.png">
+
+
+<link rel="canonical" href="https://hjiezero.github.io/posts/5bf8429/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hjiezero.github.io/posts/5bf8429/","path":"posts/5bf8429/","title":"机器学习可解释性--SHAP"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>机器学习可解释性--SHAP | Hjie</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hjie</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-book"><a href="/books" rel="section"><i class="fa fa-book-open fa-fw"></i>book</a></li><li class="menu-item menu-item-link"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">机器学习可解释性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7%E2%80%93SHAP"><span class="nav-number">2.</span> <span class="nav-text">机器学习可解释性–SHAP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81Shapley-Value"><span class="nav-number">2.1.</span> <span class="nav-text">1、Shapley Value</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81A-Unified-Approach-to-Interpreting-Model-Predictions"><span class="nav-number">2.2.</span> <span class="nav-text">2、A Unified Approach to Interpreting Model Predictions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kernel-SHAP-Linear-LIME-Shapley-values"><span class="nav-number">2.3.</span> <span class="nav-text">Kernel SHAP(Linear LIME + Shapley values)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kernel-SHAP%E8%AE%A1%E7%AE%97%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="nav-number">2.3.1.</span> <span class="nav-text">Kernel SHAP计算步骤：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kernel-SHAP%E8%AE%A1%E7%AE%97"><span class="nav-number">2.3.2.</span> <span class="nav-text">Kernel SHAP计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">2.4.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">4.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hjie"
+      src="/images/head.jpg">
+  <p class="site-author-name" itemprop="name">hjie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shangxiaaabb" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shangxiaaabb" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hjie20011001@gmail.com" title="E-Mail → mailto:hjie20011001@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hjiezero.github.io/posts/5bf8429/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.jpg">
+      <meta itemprop="name" content="hjie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hjie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="机器学习可解释性--SHAP | Hjie">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习可解释性--SHAP
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-24 20:16:50" itemprop="dateCreated datePublished" datetime="2024-02-24T20:16:50+08:00">2024-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><center>A Unified Approach to Interpreting Model Predictions</center>
+
+<center>trusting a prediction or trusting a model</center>
+
+<p>如果⼀个机器学习模型运⾏良好，为什么我们仅仅信任该模型⽽忽略为什么做出特定的决策呢？<br>诸如分类准确性之类的单⼀指标⽆法完整地描述⼤多数实际任务。当涉及到预测模型时，需要作出权衡：<strong>你是只想知道预测是什么？</strong>例如，客户流失的概率或某种药物对病⼈的疗效。<strong>还是想知道为什么做出这样的预测？</strong>这种情况下可能为了可解释性付出预测性能下降的代价。在某些情况下，你不必关⼼为什么要做出这样的预测，只要知道模型在测试数据集的预测性能良好就⾜够了。但是在其他情况下，了解 “为什么” 可以帮助你更多地了解问题、数据以及模型可能失败的原因。有些模型可能不需要解释，因为它们是在低风险的环境中使⽤的，这意味着错误不会造成严重后果 (例如，电影推荐系统)，或者该⽅法已经被⼴泛研究和评估 (例如，光学字符识别 OCR)。对可解释性的需求来⾃问题形式化的不完整性，这意味着对于某些问题或任务，仅仅获得预测结果是不够的。该模型还必须解释是怎么获得这个预测的，因为正确的预测只部分地解决了你的原始问题。</p>
+<span id="more"></span>
+
+<h1 id="机器学习可解释性"><a href="#机器学习可解释性" class="headerlink" title="机器学习可解释性"></a>机器学习可解释性</h1><p>需要建立一个解释器来解释黑盒模型，并且这个解释器必须满足以下特征：<br><strong>可解释性</strong><br>要求解释器的模型与特征都必须是可解释的，像决策树、线性模型都是很适合拿来解释的模型；而可解释的模型必须搭配可解释的特征，才是真正的可解释性，让不了解机器学习的人也能通过解释器理解模型。<br><strong>局部保真度</strong><br>既然我们已经使用了可解释的模型与特征，就不可能期望简单的可解释模型在效果上等同于复杂模型（比如原始CNN分类器）。所以解释器不需要在全局上达到复杂模型的效果，但至少在局部上效果要很接近，而此处的局部代表我们想观察的那个样本的周围。<br><strong>与模型无关</strong><br>这里所指的是与复杂模型无关，换句话说无论多复杂的模型，像是SVM或神经网络，该解释器都可以工作。<br>除了传统的特征重要性排序外，ICE、PDP、SDT、LIME、SHAP都是揭开机器学习模型黑箱的有力工具。</p>
+<ul>
+<li>特征重要性计算依据某个特征进行决策树分裂时，分裂前后的信息增益（基尼系数）；</li>
+<li>ICE和PDP考察某项特征的不同取值对模型输出值的影响；</li>
+<li>SDT用单棵决策树解释其它更复杂的机器学习模型；</li>
+<li>LIME的核心思想是对于每条样本，寻找一个更容易解释的代理模型解释原模型；</li>
+<li>SHAP的概念源于博弈论，核心思想是计算特征对模型输出的边际贡献；</li>
+</ul>
+<hr>
+<p>1、<a target="_blank" rel="noopener" href="https://hjezero.github.io/posts/cd6f0230/">机器学习可解释性–LIME</a><br>2、<a target="_blank" rel="noopener" href="https://hjezero.github.io/posts/5bf8429/">机器学习可解释性–SHAP</a></p>
+<h1 id="机器学习可解释性–SHAP"><a href="#机器学习可解释性–SHAP" class="headerlink" title="机器学习可解释性–SHAP"></a>机器学习可解释性–SHAP</h1><p>[toc]</p>
+<h2 id="1、Shapley-Value"><a href="#1、Shapley-Value" class="headerlink" title="1、Shapley Value"></a>1、Shapley Value</h2><p><strong>沙普利值</strong><a target="_blank" rel="noopener" href="https://github.com/MingchaoZhu/InterpretableMLBook">^1</a>（Shapley value），是通过考虑各个代理（agent）做出的贡献，来公平地分配合作收益。代理的沙普利值是对于一个合作项目所期望的贡献量的平均值。计算公式：<br>设$I&#x3D;{1,2…n}$为$n$个人的集合那么$i$的贡献为：</p>
+<p>$$<br>\varphi_{i}&#x3D;\sum_{s\in S_{i}}w(|s|)[v(s)-v(s\i)]<br>$$</p>
+<p>其中$S_{i}$是$I$中包含成员$i$的所有子集形成的集合，$w(|s|)$是加权因子，$s\i$表示集合$s$中去掉元素$i$后的集合。<br>$v(s)-v(s\i)$成员i在联盟中的贡献，即成员i的边际贡献；$w(|s|)$权重$w(|s|&#x3D;\frac{(|s|-1)!(n-|s|)!}{n!})$</p>
+<blockquote>
+<p>WiKi：</p>
+<p>玩家联盟合作，并从合作中获得一定的整体收益。由于一些参与者可能比其他参与者对联盟贡献更多，或者可能拥有不同的议价能力（例如威胁要摧毁全部盈余），因此在任何特定博弈中，参与者之间产生的盈余的最终分配应该是什么？或者换句话说：每个参与者对整体合作有多重要，他或她可以合理预期的回报是什么？Shapley 值为这个问题提供了一个可能的答案。</p>
+<p>1、<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Shapley_value">https://en.wikipedia.org/wiki/Shapley_value</a><br>《可解释的机器学习》<br>开源地址：<br>2、<a target="_blank" rel="noopener" href="https://github.com/MingchaoZhu/InterpretableMLBook">https://github.com/MingchaoZhu/InterpretableMLBook</a><br>在线阅读：<br>3、<a target="_blank" rel="noopener" href="https://hjezero.github.io/posts/32fedbdb/">https://hjezero.github.io/posts/32fedbdb/</a></p>
+</blockquote>
+<p>借助《可解释的机器学习》中例子，假设准备购买一间公寓，其中你所感兴趣的是：1、有无公园；2、公寓面积；3、公寓所位于的楼层；4、是否能养猫。而后对公寓价格预测。</p>
+<img data-src="https://s2.loli.net/2023/06/07/cgknwhxlI9uJT4H.png" alt="202306071608311" style="zoom:80%;"/>
+>⼀套 50 平⽅⽶的公寓，附近有公园以及禁⽌猫⼊内，预计价格为 300,000 欧元
+
+<p>那么1、公寓面积；2、公寓楼层；3、养猫？4、公园？这4个特征对<strong>预测价格</strong>300000欧元的<strong>贡献</strong>是怎么样的呢？</p>
+<blockquote>
+<p>比如说<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23180647">^2</a>：一个程序C&#x3D;500行代码需要编写，今天产品经理找了三个程序猿来完成，按照完成量发奖金：<br>条件一：$V_{1}&#x3D;100$，$V_{2}&#x3D;125$，$V_{3}&#x3D;50$<br>解释：1号屌丝程序猿独立能写100行，2号大神程序猿独立能写125行，3号美女程序猿能写50行<br>条件二：$V_{12}&#x3D;270$，$V_{23}&#x3D;350$，$V_{13}&#x3D;375$<br>解释：1,2号合作能写270行，2,3号合作能写350行，1,3号合作能写375行<br>条件三：$V_{123}&#x3D;500$<br>3个人共同能完成500行<br>那么根据3组条件，合计6种组合分别如下：<br>A.1号程序猿邀请2号程序猿加入他组成S联盟，1,2号邀请3号加入共同编写。<br>B.1号邀请3号加入成为S小组，2号加入S小组<br>C.2号邀请1号加入成为S小组，3号加入S小组<br>D.2号邀请3号加入成为S小组，1号加入S小组<br>E.3号邀请1号加入成为S小组，2号加入S小组<br>F.3号邀请2号加入成为S小组，1号加入S小组<br>计算边际贡献：</p>
+</blockquote>
+<blockquote>
+<img data-src="https://pica.zhimg.com/450be1b5a2d5196399f6665086a728d2_r.jpg?source=1940ef5c" alt="202306071608311" style="zoom:80%;"/>
+</blockquote>
+<blockquote>
+<p>根据公式1得到：<br>1的shapley value：<br>$\frac{1}{6}(100+100+145+150+325+150)&#x3D;\frac{970}{6}$</p>
+<p>依次类推得到其他人的shapely value</p>
+</blockquote>
+<h2 id="2、A-Unified-Approach-to-Interpreting-Model-Predictions"><a href="#2、A-Unified-Approach-to-Interpreting-Model-Predictions" class="headerlink" title="2、A Unified Approach to Interpreting Model Predictions"></a>2、<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1705.07874.pdf">A Unified Approach to Interpreting Model Predictions</a></h2><p>SHAP Value与LIME的方法类似，都是通过定义简单模型去对复杂模型进行解释。</p>
+<blockquote>
+<p>“we must use a simpler explanation model, which we define as any interpretable approximation of the original model.” (Lundberg 和 Lee, 2017, p. 2)</p>
+<p>我们必须使用一个更简单的解释模型，我们将其定义为对原模型的任何可解释的近似。</p>
+</blockquote>
+<p>回顾LIME模型，利用简单函数$g$去在$x$“周围”去对复杂函数$f$进行局部近似。在本论文作者将部分<strong>解释模型函数</strong>称为<em>Additive feature attribution methods</em>其形式形如：</p>
+<p>$$<br>g(z)&#x3D;\phi_{0}+\sum_{i&#x3D;1}^{M}\phi_{i}z_{i}<br>$$</p>
+<p>其中：$M$所有的简单输入特征的个数；$\phi_{i}$每一种特征的<strong>贡献</strong>（对于的shapely值）；通过计算所有特征的贡献去近似复杂函数$f(x)$</p>
+<blockquote>
+<p>论文中部分<strong>解释模型函数</strong>有：</p>
+<p>1、LIME模型对<strong>贡献</strong>计算：</p>
+<p>$$<br>\xi(s)&#x3D; argmin_{g\in G} L(f,g,\pi_{x})+\Omega(g)<br>$$</p>
+<p>2、DeepLIFT（面向深度学习的可解释方法）模型对<strong>贡献</strong>计算：</p>
+<p>$$<br>\sum_{i&#x3D;1}^{n}C_{\Delta x_{i}\Delta o}&#x3D;\Delta o<br>$$</p>
+<p>贡献为：$C_{\Delta x_{i}\Delta o}$，其中$o&#x3D;f(x)$为模型的输出，其中$r$为参考的样本输入，$\Delta o&#x3D;f(x)-f(r)$。<br>3、经典Shapley Value计算：</p>
+<ul>
+<li>Shapley regression values</li>
+</ul>
+<blockquote>
+<p>feature importances for linear models in the presence of multicollinearity.<br>此模型要求计算模型所有的特征，认为每一个特征在模型中都起到了作用。计算公式如下：</p>
+</blockquote>
+<img data-src="https://s2.loli.net/2023/06/08/LFq8k1WHQsghB4P.png" alt="202306081444642" style="zoom:60%;"/>
+
+<blockquote>
+<p>就是上面列子中提及到的计算方法</p>
+</blockquote>
+<ul>
+<li>Shapley sampling values</li>
+<li>Quantitative Input Influence</li>
+</ul>
+</blockquote>
+<p>对于<em>additive feature attribution methods</em> 存在如下三点<a target="_blank" rel="noopener" href="https://christophm.github.io/interpretable-ml-book/shap.html">性质</a>：<br>1、Local accuracy<br>2、Missingness<br>3、Consistency</p>
+<h2 id="Kernel-SHAP-Linear-LIME-Shapley-values"><a href="#Kernel-SHAP-Linear-LIME-Shapley-values" class="headerlink" title="Kernel SHAP(Linear LIME + Shapley values)"></a><em>Kernel SHAP(Linear LIME + Shapley values)</em></h2><h3 id="Kernel-SHAP计算步骤："><a href="#Kernel-SHAP计算步骤：" class="headerlink" title="Kernel SHAP计算步骤："></a>Kernel SHAP计算步骤：</h3><p><strong>※<em>1. 初始化一些数据, z’, 作为Simplified Features（随机生成（0,1,1,0）,(1,0,1,1)等）</em></strong></p>
+<blockquote>
+<p>其中：$z’_{k}\in{(0,1)}^{M}$（0：缺失特征；1：初始化中存在的特征）其中$M$是我们的维数（理解为样本特征数目），$k\in{(1,…K)}$代表生成数据个数</p>
+</blockquote>
+<p><strong>※<em>2. 将上面的Simplified Features转换到原始数据空间, 并计算对应的预测值, f(h(z’))</em></strong></p>
+<blockquote>
+<p>比如说上面卖房子例子，有四个特征所以$M&#x3D;4$那么假设初始化为$z’_{1}&#x3D;(0,1,1,0)$那么也就是存在第二和第三个特征的联盟，那么对于第一个和第四个则通过$h$函数进行转换</p>
+<img data-src="https://s2.loli.net/2023/06/08/g3nWKHrlfB5Z79T.png" alt="202306082023949" style="zoom:60%;"/>
+</blockquote>
+<p><strong>※<em>3. 对每一个z’计算对应的权重</em></strong></p>
+<blockquote>
+<p><strong>Kernel SHAP的权重函数</strong>$\pi$为：$\pi_{x^{‘}}(z^{‘})&#x3D;\frac{M-1}{(M;choose;|z^{‘}|)(M-|z^{‘}|)}$，其中$M$为维数（所有特征的个数），$|z^{‘}|$代表样本中1的个数，$M;choose;|z^{‘}|$代表$C_{M}^{z^{‘}}|z^{‘}|$。容易得到：若有很多1或很多0则取较高的权重，若0和1数量相近则取较低的权重。</p>
+<p><strong>LIME则是通过距离设置权重</strong></p>
+</blockquote>
+<p><strong>※<em>4. 拟合线性模型</em></strong><br><strong>※<em>5. 计算出每一个特征的Shapley Value, 也就是线性模型的系数</em></strong></p>
+<h3 id="Kernel-SHAP计算"><a href="#Kernel-SHAP计算" class="headerlink" title="Kernel SHAP计算"></a>Kernel SHAP计算</h3><p>损失函数：</p>
+<p>$$<br>L(f,g,\pi_x^{‘})&#x3D;\sum_{z^{‘} \in Z}[f(h_{x}^{-1}(z^{‘}))-g(z^{‘})]^{2}\pi_{x}^{‘}(z^{‘})<br>$$</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#shap进行解释</span><br><span class="line"># 新建一个解释器</span><br><span class="line"># 这里传入两个变量, 1. 模型; 2. 训练数据</span><br><span class="line">explainer = shap.KernelExplainer(predict, x)</span><br><span class="line"># 对特征重要度进行解释</span><br><span class="line">#输出array数组</span><br><span class="line">shap_values1 = explainer.shap_values(np.array(x_test))</span><br><span class="line"># 进行绘图</span><br><span class="line">shap.summary_plot(shap_values=shap_values1,</span><br><span class="line">                 features=np.array(x_test),</span><br><span class="line">                 feature_names= list(data_bs.columns[4:]),</span><br><span class="line">                 plot_type=&#x27;bar&#x27;)</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br><img data-src="https://s2.loli.net/2023/06/09/k5NbE3TvQuFtP92.png" alt="202306091557500" style="zoom:100%;"/></p>
+<p>更多：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/441302127">https://zhuanlan.zhihu.com/p/441302127</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>1、<a target="_blank" rel="noopener" href="https://github.com/MingchaoZhu/InterpretableMLBook">https://github.com/MingchaoZhu/InterpretableMLBook</a></p>
+<p>2、<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23180647">https://www.zhihu.com/question/23180647</a></p>
+<p>3、[关于Shapley Value（夏普利值）的公式 - 知乎 (zhihu.com)](<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/483891565#:~:text=Shapley">https://zhuanlan.zhihu.com/p/483891565#:~:text=Shapley</a> Value公式如下： 记 I%3D { 1%2C2%2C…%2Cn}为n个合作人的集合 varphi_i (upsilon),- upsilon (s backslash  { i })]})</p>
+<p>4、<a target="_blank" rel="noopener" href="https://e0hyl.github.io/BLOG-OF-E0/LIMEandSHAP/">https://e0hyl.github.io/BLOG-OF-E0/LIMEandSHAP/</a></p>
+<p>5、<a target="_blank" rel="noopener" href="https://mathpretty.com/10699.html">https://mathpretty.com/10699.html</a></p>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p>1、<a target="_blank" rel="noopener" href="https://christophm.github.io/interpretable-ml-book">https://christophm.github.io/interpretable-ml-book</a></p>
+<p>[^3]: [关于Shapley Value（夏普利值）的公式 - 知乎 (zhihu.com)](<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/483891565#:~:text=Shapley">https://zhuanlan.zhihu.com/p/483891565#:~:text=Shapley</a> Value公式如下： 记 I%3D { 1%2C2%2C…%2Cn}为n个合作人的集合 varphi_i (upsilon),- upsilon (s backslash  { i })]})</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0/" rel="tag"># 文献笔记</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7/" rel="tag"># 机器学习可解释性</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/32fedbdb/" rel="prev" title="可解释的机器学习">
+                  <i class="fa fa-chevron-left"></i> 可解释的机器学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/eaf5fa0b/" rel="next" title="集成学习算法">
+                  集成学习算法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hjie</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/code-unfold.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.11/pdfobject.min.js","integrity":"sha256-N6JtCNwaYm6kizuG92UtOOXamRHPwu+V1yF10g3bu/c="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

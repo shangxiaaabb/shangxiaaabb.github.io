@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IDS97Lzd7uweEA7adjgQuo1V__a3xp9oKGq6OuoxZYg">
+  <meta name="msvalidate.01" content="81407BB95B6B10326AFF04EEC297B4F2">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hjiezero.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="集成学习算法（Ensemble Learning）传统机器学习算法 (例如：决策树，人工神经网络，支持向量机，朴素贝叶斯等) 都是通过弱学习机（weak learners）来对目标进行预测（分类）。但是，以决策树算法为例，决策树算法在递归过程中，可能会过度分割样本空间，最终导致过拟合。集成学习 (Ensemble Learning) 算法的基本思想就是将多个弱学习机组合，从而实现一个预测效果更好的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="集成学习算法">
+<meta property="og:url" content="https://hjiezero.github.io/posts/eaf5fa0b/index.html">
+<meta property="og:site_name" content="Hjie">
+<meta property="og:description" content="集成学习算法（Ensemble Learning）传统机器学习算法 (例如：决策树，人工神经网络，支持向量机，朴素贝叶斯等) 都是通过弱学习机（weak learners）来对目标进行预测（分类）。但是，以决策树算法为例，决策树算法在递归过程中，可能会过度分割样本空间，最终导致过拟合。集成学习 (Ensemble Learning) 算法的基本思想就是将多个弱学习机组合，从而实现一个预测效果更好的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/12/13/5mqiQrsteTAkuoY.png">
+<meta property="og:image" content="https://s2.loli.net/2023/12/14/sGOV3tekfDjRr8l.png">
+<meta property="article:published_time" content="2024-02-24T12:16:51.683Z">
+<meta property="article:modified_time" content="2024-02-24T12:16:51.715Z">
+<meta property="article:author" content="hjie">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/12/13/5mqiQrsteTAkuoY.png">
+
+
+<link rel="canonical" href="https://hjiezero.github.io/posts/eaf5fa0b/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hjiezero.github.io/posts/eaf5fa0b/","path":"posts/eaf5fa0b/","title":"集成学习算法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>集成学习算法 | Hjie</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hjie</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-book"><a href="/books" rel="section"><i class="fa fa-book-open fa-fw"></i>book</a></li><li class="menu-item menu-item-link"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%EF%BC%88Ensemble-Learning%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">集成学习算法（Ensemble Learning）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Bagging"><span class="nav-number">2.</span> <span class="nav-text">1 Bagging</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Random-Forest"><span class="nav-number">2.1.</span> <span class="nav-text">1.2 Random Forest</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2%E3%80%81Boosting"><span class="nav-number">3.</span> <span class="nav-text">2、Boosting</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Adaboost"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 Adaboost</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-GBDT"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 GBDT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-XGBoost"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 XGBoost</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-LightGBM"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 LightGBM</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hjie"
+      src="/images/head.jpg">
+  <p class="site-author-name" itemprop="name">hjie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shangxiaaabb" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shangxiaaabb" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hjie20011001@gmail.com" title="E-Mail → mailto:hjie20011001@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hjiezero.github.io/posts/eaf5fa0b/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.jpg">
+      <meta itemprop="name" content="hjie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hjie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="集成学习算法 | Hjie">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          集成学习算法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-24 20:16:51" itemprop="dateCreated datePublished" datetime="2024-02-24T20:16:51+08:00">2024-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">机器学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="集成学习算法（Ensemble-Learning）"><a href="#集成学习算法（Ensemble-Learning）" class="headerlink" title="集成学习算法（Ensemble Learning）"></a>集成学习算法（Ensemble Learning）</h1><p>传统机器学习算法 (例如：决策树，人工神经网络，支持向量机，朴素贝叶斯等) 都是通过<strong>弱学习机</strong>（weak learners）来对目标进行预测（分类）。但是，以决策树算法为例，决策树算法在递归过程中，可能会过度分割样本空间，最终导致过拟合。集成学习 (Ensemble Learning) 算法的基本思想就是将多个弱学习机组合，从而实现一个预测效果更好的集成学习机[^1]。集成学习在<strong>统计（Statistical）</strong>、 <strong>计算（computational）</strong> 以及 <strong>表示（representation）</strong> 上相较之弱学习机有较大改善[^2]。<code>Bagging</code>和<code>Boosting</code>对比如下：</p>
+<div align="center"><img data-src="https://s2.loli.net/2023/12/13/5mqiQrsteTAkuoY.png" alt="Bagging || Boosting对比" style="zoom:60%;"/></div>
+
+<blockquote>
+<p><strong>红色线条</strong>代表训练过程；<strong>绿色线条</strong>代表<code>Boosting</code>更新权重得到的权重训练集；<strong>蓝色线条</strong>代表结合策略；<strong>中间蓝色方块</strong>代表得到的训练集（<code>Bagging</code>通过随机采样，<code>Boosting</code>则是更新权重得到训练集）</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="1-Bagging"><a href="#1-Bagging" class="headerlink" title="1 Bagging"></a>1 Bagging</h1><p><code>Bagging</code>方法是一种通过生成多组预测值，然后对这些预测值进行“聚合”的一种方法[^3]。<code>Bagging</code>的算法思路为[^4]：</p>
+<ul>
+<li>1、每次采用有放回的抽样从训练集中取出$n$个训练样本组成新的训练集</li>
+<li>2、对得到的新的训练集，通过<strong>模型</strong>进行训练得到$M$个子模型:${h_1,…,h_M}$</li>
+<li>3、对于不同的任务所采用的“聚合”方法不同：对于回归任务则是直接对每一个子模型得到的训练结果直接进行平均。而对于分类任务则是对不同子模型得到的结果进行投票。</li>
+</ul>
+<h2 id="1-2-Random-Forest"><a href="#1-2-Random-Forest" class="headerlink" title="1.2 Random Forest"></a>1.2 Random Forest</h2><p><code>Random Forest</code>[^5]是一种利用决策树算法（决策树算法如：ID3[^8]决策树算法（基于<strong>香农熵</strong>进行节点分裂），CART[^7]决策树算法（基于<strong>Gini不纯度</strong>进行节点分裂），C4.5[^6]决策树算法（基于<strong>信息增益比</strong>进行节点分裂））作为弱学习机的<code>Bagging</code>集成学习算法。</p>
+<blockquote>
+<p>在论文[^5]中，作者对于<code>Bagging</code>的优势描述如下：<br>1、通过<code>bagging</code>可以提高准确率，当随机特征被选取时<br>2、<code>Bagging</code>可以被用来对树的泛化误差（The Generalization Error $PE^*$）进行评估，于此同时也可以对强度（strength）以及相关性（correlation）进行评估</p>
+</blockquote>
+<p><code>Random Forest</code>较之<code>Adaboost</code>拥有更加好的<strong>鲁棒性</strong>以及对更强的<strong>抗噪声能力</strong>（more robust and respect to noise）。其算法思路和<code>bagging</code>的基本思路一致：</p>
+<ul>
+<li>给定训练数据集 (<em>Training set</em>) ：$T$，对训练数据集进行<strong>自助法采样（<code>Boostrap Sampling</code>）</strong> 得到一系列样本子集：${T_1,…,T_k}$，根据决策树算法$h$对样本子集构建对应的决策树：$h(x, T_k)$。在决策树每个节点进行分裂时，从全部$K$个特征空间均匀随机的选择一个特征子集（一般选择$log_2K$），然后从这个子集中选择一个最优分裂特征来构建决策树。</li>
+</ul>
+<blockquote>
+<p>在分类任务中，通常将那些不属于类别$x$的样本称之为 <em>out-of-bagged</em> 有论文中通过利用 out-of-bag 的方差估计来估计任意分类器的泛化误差</p>
+</blockquote>
+<h1 id="2、Boosting"><a href="#2、Boosting" class="headerlink" title="2、Boosting"></a>2、Boosting</h1><p><code>Boosting</code>算法相较之<code>Bagging</code>算法区别在于：<code>Bagging</code>是通过<code>bootstrap sampling</code>获取样本之后，而后去对抽取样本来构建树。而<code>Boosting</code>每一颗树都是通过先前的树的信息来进行构建。<code>Boosting</code>基本思想：通过产生数个简单的、精度比随机猜测略好的粗糙估计（<code>Boosting</code>算法中称为弱规则$h_1,…,h_k$），再将这些规则集成构造出一个高精度的估计,其算法步骤如下：</p>
+<ul>
+<li>1、利用初始化训练样本集训练得到一个弱学习器</li>
+<li>2、提高被弱学习器误分的样本的权重，使得那些被错误分类的样本在下一轮训练中可以得到更大的关注，利用调整后的样本训练得到下一个弱学习器</li>
+<li>3、重复上述步骤，直至得到$T$个学习器</li>
+<li>4、对于分类问题，采用有权重的投票方式；对于回归问题，采用加权平均得到预测值</li>
+</ul>
+<h2 id="2-1-Adaboost"><a href="#2-1-Adaboost" class="headerlink" title="2.1 Adaboost"></a>2.1 Adaboost</h2><p><code>Adaboot</code>[^12]其算法基本思路如下：<br>假设训练样本：<br>$$<br>T&#x3D;{(x_1, y_1),…,(x_m,y_m)}<br>$$<br>训练集在第$k$个弱学习器的输出权重为：<br>$$<br>D(k)&#x3D;(w_{k1},…,w_{km});w_{1i}&#x3D;\frac{1}{m};i&#x3D;1,2,…,m<br>$$</p>
+<h2 id="2-2-GBDT"><a href="#2-2-GBDT" class="headerlink" title="2.2 GBDT"></a>2.2 GBDT</h2><p><code>GBDT(Gradient Boosting Decision Tree)</code>是决策树的集成模型，按顺序训练[^9]。在每次迭代中，GBDT通过拟合负梯度（也称为残差）来学习决策树[^10]。比如说：假设一个对一个人年龄（40岁）进行预测，第一次迭代：30（10）（预测值（损失值））；第二次迭代（在损失值10的基础上进行迭代）：7（3）；第三次迭代：2（1）；第四次迭代：1（0）。那么可以得到最终年龄的预测值为：30+7+2+1&#x3D;40。而<code>GBDT</code>主要有3个主要概念构成：1、Regression Decision Tree（DT）；2、Gradient Boosting（GB）；3、Shrinkage</p>
+<blockquote>
+<p>GBDT is an ensemble model of decision trees, which are trained in sequence[^9]. In each iteration, GBDT learns the decision trees by fitting the negative gradients (also known as residual errors)[^10]</p>
+</blockquote>
+<div align=”center“><img data-src="https://s2.loli.net/2023/12/14/sGOV3tekfDjRr8l.png" alt="20231214105636" style="zoom:100%;"/></div>
+
+<p>其算法过程：假设训练样本：$T&#x3D;{(x_1,y_1),…,(x_m,y_m)}$，最大的迭代次数为：$T$，损失函数：$L$。那么：</p>
+<ul>
+<li>1、对弱学习器进行初始化：</li>
+</ul>
+<p>$$<br>c_{t j}&#x3D;\underbrace{\arg \min }<em>{c} \sum</em>{x_{i} \in R_{t j}} L(y_{i}, f_{t-1}(x_{i}))<br>$$</p>
+<ul>
+<li>2、进行$T$次迭代：</li>
+</ul>
+<p>对于样本$i&#x3D;1,2,…,m$，计算负梯度：</p>
+<p>$$<br>r_{t j}&#x3D;-\left[\frac{\left.\partial L\left(y_{i}, f\left(x_{i}\right)\right)\right)}{\partial f\left(x_{i}\right)}\right]<em>{f(x)&#x3D;f</em>{t-1}(x)}<br>$$</p>
+<p>利用$(x_i,r_{ti})(i&#x3D;1,…,m)$拟合一颗CART回归树，得到t个回归树，那么对于每棵回归树</p>
+<h2 id="2-3-XGBoost"><a href="#2-3-XGBoost" class="headerlink" title="2.3 XGBoost"></a>2.3 XGBoost</h2><p><code>XGBoot</code>是一种端到端的<code>tree Boosting</code>方法[^11]。其基本思想和<code>GBDT</code>一样。</p>
+<blockquote>
+<p>we describe a scalable endto-end tree boosting system called XGBoost</p>
+</blockquote>
+<p>给定拥有$m$个特征的$n$个样本数据： $D&#x3D;{(x_i,y_i)}(|D|&#x3D;n,x_i \in R^m,y_i \in R)$通过使用 $K$ 个独立函数对结果进行预测：<br>$$<br>\widehat{y_i}&#x3D;\sum_{k&#x3D;1}^{K}f_k(x_i), g_k \in F<br>$$<br>其中：$F&#x3D;{f(x)&#x3D;w_{q(x)}}(q:R^m \rightarrow T, w\in R^T)$为回归树空间，$q$为表示每棵树的结构，样本映射到最终的叶子节点。$T$是树中叶子的数量。$f_k$对应一个独立的树结构$q$和叶子权重。为了得到学习函数集，最小化如下<code>正则化目标（regularized object）</code>：<br>$$<br>L(\phi)&#x3D;\sum_i L(\widehat{y}_i,y_i)+ \sum_k \Omega(f_k) \<br>其中\Omega(f)&#x3D; \gamma T+ \frac{1}{2} \lambda||w||^2<br>$$<br>上式子中$L$代表损失函数，$\widehat{y}$代表预测值，$y$代表实际值，$\Omega$代表正则化项。</p>
+<h2 id="2-4-LightGBM"><a href="#2-4-LightGBM" class="headerlink" title="2.4 LightGBM"></a>2.4 LightGBM</h2><p>[^1]:<a target="_blank" rel="noopener" href="https://wires.onlinelibrary.wiley.com/doi/10.1002/widm.1249">Sagi,O.&amp;Rokach,L.Ensemble learning: A survey.WIREs Data Min &amp; Knowl 8,e1249(2018).</a><br>[^2]:<a target="_blank" rel="noopener" href="https://courses.cs.washington.edu/courses/cse446/12wi/tgd-ensembles.pdf">Dietterich T G. Ensemble learning[J]. The handbook of brain theory and neural networks, 2002, 2(1): 110-125.</a><br>[^3]:<a target="_blank" rel="noopener" href="http://link.springer.com/10.1007/BF00058655">Breiman,L.Bagging predictors.Mach Learn 24,123–140(1996).</a><br>[^4]:<a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/3-540-36434-X_4">Meir,R.&amp; Rätsch,G.An Introduction to Boosting and Leveraging. in Advanced Lectures on Machine Learning 118–183 (Springer,Berlin,Heidelberg,2003).doi:10.1007&#x2F;3-540-36434-X_4.</a><br>[^5]:<a target="_blank" rel="noopener" href="http://link.springer.com/10.1023/A:1010933404324">Breiman,L.Random Forests.Machine Learning 45,5–32(2001).</a><br>[^6]:<a target="_blank" rel="noopener" href="https://doi.org/10.1007/BF00993309">Salzberg,S.L.C4.5:Programs for Machine Learning by J. Ross Quinlan. Morgan Kaufmann Publishers, Inc., 1993. Mach Learn 16, 235–240 (1994).</a><br>[^7]:<a target="_blank" rel="noopener" href="https://wires.onlinelibrary.wiley.com/doi/10.1002/widm.8">Loh, W. Classification and regression trees. WIREs Data Min &amp; Knowl 1, 14–23 (2011).</a><br>[^8]:<a target="_blank" rel="noopener" href="http://link.springer.com/10.1007/BF00116251">Quinlan, J. R. Induction of decision trees. Mach Learn 1, 81–106 (1986).</a><br>[^9]:<a target="_blank" rel="noopener" href="http://www.jstor.org/stable/2699986">Friedman,J.H.Greedy Function Approximation: A Gradient Boosting Machine. The Annals of Statistics 29,1189–1232(2001).</a><br>[^10]:<a target="_blank" rel="noopener" href="https://proceedings.neurips.cc/paper_files/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html">Ke,G.et al.LightGBM: A Highly Efficient Gradient Boosting Decision Tree. in Advances in Neural Information Processing Systems vol.30(Curran Associates, Inc.,2017).</a><br>[^11]:<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/2939672.2939785">Chen,T.&amp;Guestrin,C.XGBoost:A Scalable Tree Boosting System. in Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining 785–794 (Association for Computing Machinery, 2016).doi:10.1145&#x2F;2939672.2939785.</a><br>[^12]:<a href="%5B10.1006/jcss.1997.1504%5D(https://linkinghub.elsevier.com/retrieve/pii/S002200009791504X)">Freund,Y.&amp;Schapire,R.E.A Decision-Theoretic Generalization of On-Line Learning and an Application to Boosting.Journal of Computer and System Sciences 55,119–139 (1997).</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/5bf8429/" rel="prev" title="机器学习可解释性--SHAP">
+                  <i class="fa fa-chevron-left"></i> 机器学习可解释性--SHAP
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/3065358813/" rel="next" title="初识深度学习">
+                  初识深度学习 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hjie</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/code-unfold.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.11/pdfobject.min.js","integrity":"sha256-N6JtCNwaYm6kizuG92UtOOXamRHPwu+V1yF10g3bu/c="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

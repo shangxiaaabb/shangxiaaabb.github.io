@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IDS97Lzd7uweEA7adjgQuo1V__a3xp9oKGq6OuoxZYg">
+  <meta name="msvalidate.01" content="81407BB95B6B10326AFF04EEC297B4F2">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hjiezero.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Pytorch学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习——pytorch学习">
+<meta property="og:url" content="https://hjiezero.github.io/posts/1867073817/index.html">
+<meta property="og:site_name" content="Hjie">
+<meta property="og:description" content="Pytorch学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hjiezero.github.io/pytorch%E5%AD%A6%E4%B9%A0/1680163291680.png">
+<meta property="og:image" content="https://hjiezero.github.io/pytorch%E5%AD%A6%E4%B9%A0/1680164219080.png">
+<meta property="og:image" content="https://hjiezero.github.io/pytorch%E5%AD%A6%E4%B9%A0/1680164657109.png">
+<meta property="og:image" content="https://hjiezero.github.io/pytorch%E5%AD%A6%E4%B9%A0/1680176521877.png">
+<meta property="article:published_time" content="2024-02-24T12:16:54.461Z">
+<meta property="article:modified_time" content="2024-02-24T12:16:54.508Z">
+<meta property="article:author" content="hjie">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="Pytorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hjiezero.github.io/pytorch%E5%AD%A6%E4%B9%A0/1680163291680.png">
+
+
+<link rel="canonical" href="https://hjiezero.github.io/posts/1867073817/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hjiezero.github.io/posts/1867073817/","path":"posts/1867073817/","title":"深度学习——pytorch学习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深度学习——pytorch学习 | Hjie</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hjie</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-book"><a href="/books" rel="section"><i class="fa fa-book-open fa-fw"></i>book</a></li><li class="menu-item menu-item-link"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Pytorch%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">Pytorch学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pytorch%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">pytorch基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.1.</span> <span class="nav-text">数据操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%BC%A0%E9%87%8F"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">创建张量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tensor%E5%92%8Cnumpy%E7%9B%B8%E4%BA%92%E8%BD%AC%E6%8D%A2"><span class="nav-number">1.1.2.</span> <span class="nav-text">tensor和numpy相互转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%B1%82%E6%A2%AF%E5%BA%A6"><span class="nav-number">1.2.</span> <span class="nav-text">自动求梯度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.3.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hjie"
+      src="/images/head.jpg">
+  <p class="site-author-name" itemprop="name">hjie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shangxiaaabb" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shangxiaaabb" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hjie20011001@gmail.com" title="E-Mail → mailto:hjie20011001@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hjiezero.github.io/posts/1867073817/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.jpg">
+      <meta itemprop="name" content="hjie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hjie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深度学习——pytorch学习 | Hjie">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习——pytorch学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-24 20:16:54" itemprop="dateCreated datePublished" datetime="2024-02-24T20:16:54+08:00">2024-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="Pytorch学习"><a href="#Pytorch学习" class="headerlink" title="Pytorch学习"></a>Pytorch学习</h1><span id="more"></span>
+<p>[toc]</p>
+<h2 id="pytorch基本操作"><a href="#pytorch基本操作" class="headerlink" title="pytorch基本操作"></a>pytorch基本操作</h2><p>pytorch使用前首先了解一个一个概念：张量。个人觉得没必要去了解他到底是一种什么东西，可以将其与我们numpy中数组一起进行了解</p>
+<blockquote>
+<p>张量可以看作是⼀个多维数组。标量可以看作是0维张量，向量可以看作1维张量，矩阵可以看作是⼆维张量</p>
+</blockquote>
+<p>那么我们后续也都是围绕张量进行展开了解</p>
+<h3 id="数据操作"><a href="#数据操作" class="headerlink" title="数据操作"></a>数据操作</h3><h4 id="创建张量"><a href="#创建张量" class="headerlink" title="创建张量"></a>创建张量</h4><p><img data-src="/pytorch%E5%AD%A6%E4%B9%A0/1680163291680.png" alt="1680163291680"></p>
+<blockquote>
+<p>注意使用pytorch就不得不了解一大特点：利用GPU计算。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;a = torch.ones(<span class="number">5</span>,<span class="number">3</span>,device=<span class="string">&#x27;cuda&#x27;</span>,dtype=torch.float64)<span class="comment">#设置类型，gpu</span></span><br><span class="line">&gt;&gt;a</span><br><span class="line">tensor([[<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>]], device=<span class="string">&#x27;cuda:0&#x27;</span>, dtype=torch.float64)</span><br><span class="line">&gt;&gt;<span class="built_in">print</span>(a.size(),a.shape)</span><br><span class="line">torch.Size([<span class="number">5</span>, <span class="number">3</span>]) torch.Size([<span class="number">5</span>, <span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+
+<h4 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h4><ul>
+<li><strong>加法运算</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(x+y)</span><br><span class="line"><span class="built_in">print</span>(torch.add(x,y))</span><br><span class="line"><span class="built_in">print</span>(y.add(x))</span><br><span class="line">-&gt;tensor([[<span class="number">0.9841</span>, <span class="number">1.1514</span>, <span class="number">1.0982</span>],</span><br><span class="line">        [<span class="number">0.9974</span>, <span class="number">0.4662</span>, <span class="number">1.5250</span>],</span><br><span class="line">        [<span class="number">0.5120</span>, <span class="number">0.3424</span>, <span class="number">1.6973</span>],</span><br><span class="line">        [<span class="number">1.1808</span>, <span class="number">1.1172</span>, <span class="number">1.6786</span>],</span><br><span class="line">        [<span class="number">1.9113</span>, <span class="number">1.3679</span>, <span class="number">1.3846</span>]])</span><br><span class="line">三个结果都一样</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>索引</strong><br>索引出来的结果与原数据共享内存，也即修改⼀个，另⼀个会跟着修改。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">b = x[<span class="number">0</span>:<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(b)</span><br><span class="line">-&gt;tensor([[<span class="number">0.6847</span>, <span class="number">0.9743</span>, <span class="number">0.9259</span>]])</span><br><span class="line">b +=<span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(x[<span class="number">0</span>,:])</span><br><span class="line">-&gt;tensor([<span class="number">2.6847</span>, <span class="number">2.9743</span>, <span class="number">2.9259</span>])</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="/pytorch%E5%AD%A6%E4%B9%A0/1680164219080.png" alt="1680164219080"></p>
+</li>
+<li><p><strong>改变形状</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">c = x.view(<span class="number">15</span>)</span><br><span class="line">c</span><br><span class="line">-&gt;tensor([<span class="number">2.6847</span>, <span class="number">2.9743</span>, <span class="number">2.9259</span>, <span class="number">0.7470</span>, <span class="number">0.2349</span>, <span class="number">0.6642</span>, <span class="number">0.3026</span>, <span class="number">0.1884</span>, <span class="number">0.9414</span>,</span><br><span class="line">        <span class="number">0.4747</span>, <span class="number">0.8469</span>, <span class="number">0.7788</span>, <span class="number">0.9762</span>, <span class="number">0.4373</span>, <span class="number">0.6214</span>])</span><br><span class="line">c +=<span class="number">1</span></span><br><span class="line">x</span><br><span class="line">-&gt;tensor([[<span class="number">3.6847</span>, <span class="number">3.9743</span>, <span class="number">3.9259</span>],</span><br><span class="line">        [<span class="number">1.7470</span>, <span class="number">1.2349</span>, <span class="number">1.6642</span>],</span><br><span class="line">        [<span class="number">1.3026</span>, <span class="number">1.1884</span>, <span class="number">1.9414</span>],</span><br><span class="line">        [<span class="number">1.4747</span>, <span class="number">1.8469</span>, <span class="number">1.7788</span>],</span><br><span class="line">        [<span class="number">1.9762</span>, <span class="number">1.4373</span>, <span class="number">1.6214</span>]])</span><br></pre></td></tr></table></figure>
+
+<p>利用view()函数返回的新tensor与源tensor共享内存（其实是同⼀个tensor），也即更改其中的⼀个，另<br>外⼀个也会跟着改变。所以如果我们想返回⼀个真正新的副本（即不共享内存）该怎么办呢？Pytorch还提供了⼀个reshape()可以改变形状，但是此函数并不能保证返回的是其拷⻉，所以不推荐使⽤。推荐先<br>⽤ clone 创造⼀个副本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">x_clone = x.clone()</span><br><span class="line">x_clone +=<span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(x_clone, <span class="string">&#x27;\n&#x27;</span>, x)</span><br><span class="line">-&gt;tensor([[<span class="number">4.6847</span>, <span class="number">4.9743</span>, <span class="number">4.9259</span>],</span><br><span class="line">        [<span class="number">2.7470</span>, <span class="number">2.2349</span>, <span class="number">2.6642</span>],</span><br><span class="line">        [<span class="number">2.3026</span>, <span class="number">2.1884</span>, <span class="number">2.9414</span>],</span><br><span class="line">        [<span class="number">2.4747</span>, <span class="number">2.8469</span>, <span class="number">2.7788</span>],</span><br><span class="line">        [<span class="number">2.9762</span>, <span class="number">2.4373</span>, <span class="number">2.6214</span>]]) </span><br><span class="line"> tensor([[<span class="number">3.6847</span>, <span class="number">3.9743</span>, <span class="number">3.9259</span>],</span><br><span class="line">        [<span class="number">1.7470</span>, <span class="number">1.2349</span>, <span class="number">1.6642</span>],</span><br><span class="line">        [<span class="number">1.3026</span>, <span class="number">1.1884</span>, <span class="number">1.9414</span>],</span><br><span class="line">        [<span class="number">1.4747</span>, <span class="number">1.8469</span>, <span class="number">1.7788</span>],</span><br><span class="line">        [<span class="number">1.9762</span>, <span class="number">1.4373</span>, <span class="number">1.6214</span>]])</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>线性代数</strong></p>
+<p><img data-src="/pytorch%E5%AD%A6%E4%B9%A0/1680164657109.png" alt="1680164657109"></p>
+<blockquote>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/tensors.html">torch.Tensor — PyTorch 2.0 documentation</a></p>
+</blockquote>
+</li>
+<li><p><strong>广播机制</strong><br>线性代数告诉我们，要是两个矩阵形状不同是不可以直接相加的，但是pytorch的广播机制可以实现此类计算。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">x = torch.arange(<span class="number">1</span>, <span class="number">3</span>).view(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(x)</span><br><span class="line">y = torch.arange(<span class="number">1</span>, <span class="number">4</span>).view(<span class="number">3</span>, <span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(y)</span><br><span class="line"><span class="built_in">print</span>(x + y)</span><br><span class="line">-&gt;tensor([[<span class="number">1</span>, <span class="number">2</span>]])</span><br><span class="line">tensor([[<span class="number">1</span>],</span><br><span class="line">        [<span class="number">2</span>],</span><br><span class="line">        [<span class="number">3</span>]])</span><br><span class="line">tensor([[<span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">        [<span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">4</span>, <span class="number">5</span>]])</span><br></pre></td></tr></table></figure>
+
+<p>计算过程中，由于x，y的形状是不相同的，通过广播机制，会将x进行拓展，也就是将x变成3x2，y变成3x2而后再进行计算。</p>
+</li>
+</ul>
+<h3 id="tensor和numpy相互转换"><a href="#tensor和numpy相互转换" class="headerlink" title="tensor和numpy相互转换"></a>tensor和numpy相互转换</h3><p>我们很容易⽤ numpy() 和 from_numpy() 将 Tensor 和NumPy中的数组相互转换。但是需要注意的⼀<br>点是： <strong>这两个函数所产⽣的的 Tensor 和NumPy中的数组共享相同的内存（所以他们之间的转换很<br>快），改变其中⼀个时另⼀个也会改变！！！</strong></p>
+<blockquote>
+<p>还有⼀个常⽤的将NumPy中的array转换成 Tensor 的⽅法就是 torch.tensor() , 需要注意的<br>是，此⽅法总是会进⾏数据拷⻉（就会消耗更多的时间和空间），所以返回的 Tensor 和原来的数<br>据不再共享内</p>
+</blockquote>
+<ul>
+<li>numpy()<br>将tensor转换为numpy形式</li>
+<li>torch.from_numpy()<br>将numpy转换为tensor</li>
+</ul>
+<h2 id="自动求梯度"><a href="#自动求梯度" class="headerlink" title="自动求梯度"></a>自动求梯度</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html#sphx-glr-beginner-blitz-autograd-tutorial-py">A Gentle Introduction to torch.autograd — PyTorch Tutorials 2.0.0+cu117 documentation</a></p>
+</blockquote>
+<p>在生成tensor时候我们添加属性 (requires_grad&#x3D;True )，它将开始追踪(track)在其上的所有操作（这样就可以利⽤链式法则进⾏梯度传播了）。完成计算后，可以调⽤.backward() 来完成所有梯度计算。此Tensor的梯度将累积到.grad 属性中。</p>
+<p>如果不想要被继续追踪，可以调⽤ .detach() 将其从追踪记录中分离出来，这样就可以防⽌将来的计算被追踪，这样梯度就传不过去了。此外，还可以⽤ with torch.no_grad() 将不想被追踪的操作代码块包裹起来，这种⽅法在评估模型的时候很常⽤，因为在评估模型时，我们并不需要计算可训练参数（requires_grad&#x3D;True）的梯度。</p>
+<blockquote>
+<p>通俗的来讲就是我们添加 requires_grad 可以记录在张量上所进行的所有的操作</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">x = torch.ones(<span class="number">2</span>,<span class="number">2</span>,requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = x+ <span class="number">2</span></span><br><span class="line">z = y*y*<span class="number">3</span></span><br><span class="line">p = z.mean()</span><br><span class="line"><span class="built_in">print</span>(p)</span><br><span class="line">-&gt;tensor(<span class="number">27.</span>, grad_fn=&lt;MeanBackward0&gt;)</span><br><span class="line">p.backward()</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br><span class="line">-&gt;tensor([[<span class="number">4.5000</span>, <span class="number">4.5000</span>],</span><br><span class="line">        [<span class="number">4.5000</span>, <span class="number">4.5000</span>]])</span><br></pre></td></tr></table></figure>
+
+<p>计算结果怎么来的呢？首先我们知道p所进行的计算如下</p>
+<p>$$<br>p&#x3D;\frac{1}{4}\sum3(x_i+2)^2<br>$$</p>
+<p>$$<br>\dfrac{\partial p}{\partial x}|_{x_i&#x3D;1}&#x3D;\frac{9}{2}&#x3D;4.5<br>$$</p>
+<p>不过在此处需要一个<strong>注意事项</strong>，我们的p必须是一个标量，也就是说p必须是一个数字，不然结果会报错。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">x = torch.tensor([<span class="number">2.</span>, <span class="number">1.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = torch.tensor([[<span class="number">1.</span>, <span class="number">2.</span>], [<span class="number">3.</span>, <span class="number">4.</span>]], requires_grad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">z = torch.mm(x.view(<span class="number">1</span>, <span class="number">2</span>), y)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;z:<span class="subst">&#123;z&#125;</span>&quot;</span>)</span><br><span class="line">z.backward(torch.Tensor([[<span class="number">1.</span>, <span class="number">0</span>]]), retain_graph=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;x.grad: <span class="subst">&#123;x.grad&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;y.grad: <span class="subst">&#123;y.grad&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">--&gt;z:tensor([[<span class="number">5.</span>, <span class="number">8.</span>]], grad_fn=&lt;MmBackward&gt;)</span><br><span class="line">x.grad: tensor([[<span class="number">1.</span>, <span class="number">3.</span>]])</span><br><span class="line">y.grad: tensor([[<span class="number">2.</span>, <span class="number">0.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">0.</span>]])</span><br></pre></td></tr></table></figure>
+
+<p>算法解释如下：<br><img data-src="/pytorch%E5%AD%A6%E4%B9%A0/1680176521877.png" alt="1680176521877"><br>我们在对z进行求梯度的时候，指定了参数[1,0]也就是相对于进行了加权操作</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.w3cschool.cn/article/9034837.html">https://www.w3cschool.cn/article/9034837.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39208832/article/details/117415229">https://blog.csdn.net/qq_39208832/article/details/117415229</a></p>
+<p><a target="_blank" rel="noopener" href="https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html#sphx-glr-beginner-blitz-autograd-tutorial-py">https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html#sphx-glr-beginner-blitz-autograd-tutorial-py</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/6b4c75c/" rel="prev" title="Gaussian Processes for Machine Learnin">
+                  <i class="fa fa-chevron-left"></i> Gaussian Processes for Machine Learnin
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/8959fb27/" rel="next" title="模式识别与机器学习">
+                  模式识别与机器学习 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hjie</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/code-unfold.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.11/pdfobject.min.js","integrity":"sha256-N6JtCNwaYm6kizuG92UtOOXamRHPwu+V1yF10g3bu/c="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

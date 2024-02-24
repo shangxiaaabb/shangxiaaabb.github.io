@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IDS97Lzd7uweEA7adjgQuo1V__a3xp9oKGq6OuoxZYg">
+  <meta name="msvalidate.01" content="81407BB95B6B10326AFF04EEC297B4F2">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hjiezero.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.17.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="初识深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识深度学习">
+<meta property="og:url" content="https://hjiezero.github.io/posts/3065358813/index.html">
+<meta property="og:site_name" content="Hjie">
+<meta property="og:description" content="初识深度学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/wCQ1ymusatMEjkX.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/d3XRzVQlGiwokWy.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/6ojruqShLPxmCdO.png">
+<meta property="og:image" content="https://s2.loli.net/2023/06/04/wCQ1ymusatMEjkX.png">
+<meta property="og:image" content="https://hjiezero.github.io/%E5%88%9D%E8%AF%86%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/1680867838870.png">
+<meta property="article:published_time" content="2024-02-24T12:16:51.746Z">
+<meta property="article:modified_time" content="2024-02-24T12:16:51.778Z">
+<meta property="article:author" content="hjie">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="分类算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/06/04/wCQ1ymusatMEjkX.png">
+
+
+<link rel="canonical" href="https://hjiezero.github.io/posts/3065358813/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hjiezero.github.io/posts/3065358813/","path":"posts/3065358813/","title":"初识深度学习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>初识深度学习 | Hjie</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hjie</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-book"><a href="/books" rel="section"><i class="fa fa-book-open fa-fw"></i>book</a></li><li class="menu-item menu-item-link"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E8%AF%86%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">初识深度学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%88%9D%E8%AF%86%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">1.1.</span> <span class="nav-text">一、初识神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 神经网络的工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 神经网络基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-%E5%BC%A0%E9%87%8F"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">1.2.1 张量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-1-1-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">1.2.1.1 时间序列数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-1-2-%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">1.2.1.2 图像数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-1-3-%E8%A7%86%E9%A2%91%E6%95%B0%E6%8D%AE"><span class="nav-number">1.1.2.1.3.</span> <span class="nav-text">1.2.1.3 视频数据</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2-%E5%BC%A0%E9%87%8F%E7%9A%84%E8%BF%90%E7%AE%97"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">1.2.2 张量的运算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-3-%E5%9F%BA%E4%BA%8E%E6%A2%AF%E5%BA%A6%E4%BC%98%E5%8C%96"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">1.2.3 基于梯度优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A1%A5%E5%85%85"><span class="nav-number">1.2.</span> <span class="nav-text">二、机器学习补充</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 机器学习模型评估</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 正则化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-%E6%B7%BB%E5%8A%A0%E6%9D%83%E9%87%8D%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.2.1 添加权重正则化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">2.3 机器学习流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%8E%A8%E8%8D%90%E6%96%87%E7%8C%AE"><span class="nav-number">1.4.</span> <span class="nav-text">三、推荐文献</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hjie"
+      src="/images/head.jpg">
+  <p class="site-author-name" itemprop="name">hjie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shangxiaaabb" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shangxiaaabb" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hjie20011001@gmail.com" title="E-Mail → mailto:hjie20011001@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hjiezero.github.io/posts/3065358813/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.jpg">
+      <meta itemprop="name" content="hjie">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hjie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="初识深度学习 | Hjie">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          初识深度学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-24 20:16:51" itemprop="dateCreated datePublished" datetime="2024-02-24T20:16:51+08:00">2024-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="初识深度学习"><a href="#初识深度学习" class="headerlink" title="初识深度学习"></a>初识深度学习</h1><span id="more"></span>
+<hr>
+<p><strong>注：</strong></p>
+<p>1、本文为个人学习笔记，所以内容大多比较简练不做过多解释</p>
+<p>2、文章参考书籍：1、《python深度学习》[美] 弗朗索瓦·肖莱　著 张亮 译；2、《深度学习》(花书)</p>
+<p>3、部分内容自己阅读参考文献进行补充</p>
+<p>4、大部分代码都是<strong>基于pytorch</strong>进行编写&lt;先学原理后学代码&gt;</p>
+<p>n、后续用到什么就继续继续补充</p>
+<hr>
+<p>[toc]</p>
+<h2 id="一、初识神经网络"><a href="#一、初识神经网络" class="headerlink" title="一、初识神经网络"></a>一、初识神经网络</h2><h3 id="1-1-神经网络的工作原理"><a href="#1-1-神经网络的工作原理" class="headerlink" title="1.1 神经网络的工作原理"></a>1.1 神经网络的工作原理</h3><p><img data-src="https://s2.loli.net/2023/06/04/wCQ1ymusatMEjkX.png" alt="1680779540890"></p>
+<ul>
+<li>优化器：随机梯度下降、牛顿法</li>
+<li>层：可以取类比多层感知机模型中的隐藏层</li>
+<li>数据变换：激活函数</li>
+</ul>
+<p>进一步解释见：2.2.3 基于梯度优化</p>
+<h3 id="1-2-神经网络基础知识"><a href="#1-2-神经网络基础知识" class="headerlink" title="1.2 神经网络基础知识"></a>1.2 神经网络基础知识</h3><h4 id="1-2-1-张量"><a href="#1-2-1-张量" class="headerlink" title="1.2.1 张量"></a>1.2.1 张量</h4><p>关于张量的了解其实没必要过多去解释他到底是个什么样子的，python编程过程中可以直接将其与numpy的矩阵一起了解(<strong>下以pytorch为例</strong>)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">a = torch.ones(<span class="number">3</span>,<span class="number">2</span>)</span><br><span class="line">a</span><br><span class="line">&gt;tensor([[<span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">1.</span>]])</span><br></pre></td></tr></table></figure>
+
+<p>但是张量的一些基本性质还是需要了解：</p>
+<ul>
+<li><strong>轴的个数（阶）</strong>。例如，3D 张量有 3 个轴，矩阵有 2 个轴。这在 Numpy 等 Python 库中也叫张量的 ndim。</li>
+<li><strong>形状</strong>。这是一个整数元组，表示张量沿每个轴的维度大小（元素个数）。例如，上述列子就是一个二维的3x2</li>
+<li><strong>数据类型</strong>。这是张量中所包含数据的类型，例如，张量的类型可以是 float32、uint8、float64 等。在极少数情况下，你可能会遇到字符（char）张量。注意，Numpy（以及大多数其他库）中不存在字符串张量，因为张量存储在预先分配的连续内存段中，而字符串的长度是可变的，无法用这种方式存储。</li>
+</ul>
+<blockquote>
+<p><strong>pytorch的具体语法，后续继续补充</strong></p>
+</blockquote>
+<h5 id="1-2-1-1-时间序列数据"><a href="#1-2-1-1-时间序列数据" class="headerlink" title="1.2.1.1 时间序列数据"></a>1.2.1.1 时间序列数据</h5><p>以股票交易为例：每时每刻都存在交易，并且每时每刻对于不同的股票也都存在买入、卖出。那么我们可以借助3D张量进行表示：</p>
+<img data-src="https://s2.loli.net/2023/06/04/d3XRzVQlGiwokWy.png" alt="202306041904592" style="zoom:100%;"/>
+
+<ul>
+<li><strong>时间步长</strong>：可以假设是1分钟内进行交易</li>
+<li><strong>特征</strong>：某一个股票进行的交易</li>
+<li><strong>样本</strong>：不同的层可以表示是不同股票：茅台。。。。。</li>
+</ul>
+<h5 id="1-2-1-2-图像数据"><a href="#1-2-1-2-图像数据" class="headerlink" title="1.2.1.2 图像数据"></a>1.2.1.2 图像数据</h5><p>一张<strong>彩色</strong>图片可以由3部分构成：高度、宽度、颜色深度（灰度图像只有一个颜色通道可以取消颜色深度），那么图片也是3D张量：</p>
+<img data-src="https://s2.loli.net/2023/06/04/6ojruqShLPxmCdO.png" alt="202306041905909" style="zoom:100%;"/>
+
+<blockquote>
+<p>假设图片为<strong>彩色</strong>，大小为256x256。那么我们张量可以如此表示：（n, 256, 256, 3)。n：图片数目；3：彩色图片一般3种颜色（光的3原色）</p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E4%B8%89%E5%8E%9F%E8%89%B2%E5%8E%9F%E7%90%86/6969780">三原色原理_百度百科 (baidu.com)</a></p>
+</blockquote>
+<p>$$<br>\textcolor{red}{注意}\text{:PyTorch 模块要求张量排列为 C×H×W（分别表示通道、高度和宽度）而tensorflow则是：H×WxC}<br>$$</p>
+<h5 id="1-2-1-3-视频数据"><a href="#1-2-1-3-视频数据" class="headerlink" title="1.2.1.3 视频数据"></a>1.2.1.3 视频数据</h5><p>视频是一帧一帧所构成的，也就是说我们看到的视频都是一张一张的图片，也就是说一个视频是一个4D张量（不同视频构成5D张量）</p>
+<h4 id="1-2-2-张量的运算"><a href="#1-2-2-张量的运算" class="headerlink" title="1.2.2 张量的运算"></a>1.2.2 张量的运算</h4><blockquote>
+<p>后续补充！</p>
+<p><a target="_blank" rel="noopener" href="https://www.w3cschool.cn/pytorch/pytorch-5ubt3bby.html">1、PyTorch是什么？_w3cschool</a></p>
+</blockquote>
+<h4 id="1-2-3-基于梯度优化"><a href="#1-2-3-基于梯度优化" class="headerlink" title="1.2.3 基于梯度优化"></a>1.2.3 基于梯度优化</h4><p>在此引用神经网络工作原理图：</p>
+<img data-src="https://s2.loli.net/2023/06/04/wCQ1ymusatMEjkX.png" alt="202306041900967" style="zoom:100%;"/>
+
+
+<p>在多层感知机模型中有3类常用的激活函数：Sigmoid、Relu、Tannh。假设卷积神经网络只有2层：$f(x)&#x3D;f^{(1)}(f^{(2)}(x,w,b))$此处我们的$f^{(2)}$就是我们的激活函数，而$w,b$就是我们的权重。一开始，这些权重矩阵取较小的<strong>随机值</strong>，这一步叫作<strong>随机初始化</strong>，他们肯定不会得到任何有用的表示。虽然得到的表示是没有意义的，但这是一个起点。下一步则是根据反馈信号逐渐调节这些权重。这个逐渐调节的过程叫作<strong>训练</strong>，也就是机器学习中的学习。</p>
+<p>上述过程发生在一个训练循环（training loop）内，其具体过程如下。必要时一直重复这些步骤。</p>
+<ul>
+<li>(1) 抽取训练样本 x 和对应目标 y 组成的数据批量。</li>
+<li>(2) 在 x 上运行网络［这一步叫作<strong>前向传播</strong>］，得到预测值 y_pred。</li>
+<li>(3) 计算网络在这批数据上的<em>损失</em>，用于衡量 y_pred 和 y 之间的距离。</li>
+<li>(4) 更新网络的所有权重，使网络在这批数据上的损失略微下降</li>
+</ul>
+<blockquote>
+<p><em>关于权重深度学习有何不同</em></p>
+<p>先前的机器学习技术（浅层学习）仅包含将输入数据变换到一两个连续的表示空间，通常使用简单的变换，比如高维非线性投影（SVM）或决策树。但这些技术通常无法得到复杂问题所需要的精确表示。因此，人们必须竭尽全力让初始输入数据更适合用这些方法处理，也必须手动为数据设计好的表示层。这叫作<strong>特征工程</strong>，深度学习完全将这个步骤自动化。</p>
+</blockquote>
+<p>上述步骤复杂在于更新权重！我们更新权重的目的：使得损失函数最小。我们使用得方法是：<strong>随机梯度下降：</strong></p>
+<ul>
+<li>(1) 抽取训练样本 x 和对应目标 y 组成的数据批量。</li>
+<li>(2) 在 x 上运行网络，得到预测值 y_pred。</li>
+<li>(3) 计算网络在这批数据上的损失，用于衡量 y_pred 和 y 之间的距离。</li>
+<li>(4) 计算损失相对于网络参数的梯度［一次<strong>反向传播</strong>］。</li>
+<li>(5) 将参数沿着梯度的反方向移动一点，比如 W -&#x3D; step * gradient，从而使这批数据上的损失减小一点。</li>
+</ul>
+<p>前向传播和反向传播：</p>
+<ul>
+<li>前向传播：输入提供的初始信息x，然后传播给每一层得隐藏单元，最终产出输出y</li>
+<li>反向传播：允许来自代价函数的信息通过网络向后流动，以便计算梯度</li>
+</ul>
+<blockquote>
+<p>设存在模型：$\widehat{y}&#x3D;wx+b$，设损失函数为：$J&#x3D;\frac{1}{2}(y-\widehat{y})^2$。</p>
+<p><strong>前向传播</strong>：我们直接输入$x$最后返回y</p>
+<p><strong>反向传播</strong>：我们在初始化参数：$w,b$时候所得到$\widehat{y}$损失函数值比较大。那么根据梯度下降我们需要对$w，b$进行更新于是就有：梯度：$\nabla_{w}J &#x3D;\dfrac{\partial J}{\partial \widehat{y}}\dfrac{\partial \widehat{y}}{\partial {w}}$，所以：$w&#x3D;w-\epsilon\nabla_{w}J$，我们计算梯度的过程就是反向传播过程</p>
+</blockquote>
+<h2 id="二、机器学习补充"><a href="#二、机器学习补充" class="headerlink" title="二、机器学习补充"></a>二、机器学习补充</h2><h3 id="2-1-机器学习模型评估"><a href="#2-1-机器学习模型评估" class="headerlink" title="2.1 机器学习模型评估"></a>2.1 机器学习模型评估</h3><p>机器学习的目的是得到可以<strong>泛化的模型</strong>，即在前所未见的数据上表现很好。在机器学习过程中我们经常需要对数据进行切分：划分训练集、测试集。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split </span><br><span class="line">x_train, x_test, y_train, y_test= train_test_split(x,y,test_size=<span class="number">0.2</span>) <span class="comment">#选取20%的数据作为测试数据</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>切分有两种：</p>
+<p>1、简单的留出验证（上述代码）</p>
+<p>2、<strong>K 折验证</strong></p>
+<p>将数据划分为大小相同的 K 个分区。对于每个分区 i，在剩余的 K-1 个分区上训练模型，然后在分区 i 上评估模型。最终分数等于 K 个分数的平均值。</p>
+<p><img data-src="/%E5%88%9D%E8%AF%86%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/1680867838870.png" alt="1680867838870"></p>
+</blockquote>
+<p>我们最终的目的是我们设计的模型在测试集上、训练集上的测试效果都满足我们的要求。在此过程中涉及两个问题：1、<strong>欠拟合</strong>：模型不能再训练集上或者足够低的误差；2、<strong>过拟合</strong>：训练误差和测试误差之间差距过大。</p>
+<h3 id="2-2-正则化"><a href="#2-2-正则化" class="headerlink" title="2.2 正则化"></a>2.2 正则化</h3><p>为了防止模型从训练数据中学到错误或无关紧要的模式，<strong>最优解决方法是获取更多的训练数据</strong>。模型的训练数据越多，泛化能力自然也越好。如果无法获取更多数据，次优解决方法是<strong>调节模型允许存储的信息量</strong>，或对模型允许存储的信息加以约束。如果一个网络只能记住几个模式，那么优化过程会迫使模型集中学习最重要的模式，这样更可能得到良好的泛化。这种降低过拟合的方法叫作正则化。</p>
+<h3 id="2-2-1-添加权重正则化"><a href="#2-2-1-添加权重正则化" class="headerlink" title="2.2.1 添加权重正则化"></a>2.2.1 添加权重正则化</h3><p>L2正则化：</p>
+<p>$$<br>\widehat{J}(w,x,y)&#x3D;J(w,x,y)+\frac{\alpha}{2}||w||^2<br>$$</p>
+<p>L1正则化：</p>
+<p>$$<br>\widehat{J}(w,x,y)&#x3D;J(w,x,y)+\alpha||w||<br>$$</p>
+<p>上述函数：$J$：损失函数，$||w||$：我们添加正则化项。在此过程中我们只对权重做惩罚而不对偏置做惩罚。</p>
+<h2 id="2-3-机器学习流程"><a href="#2-3-机器学习流程" class="headerlink" title="2.3 机器学习流程"></a>2.3 机器学习流程</h2><p>1、定义问题，收集数据集</p>
+<p>2、选择衡量成功的指标</p>
+<blockquote>
+<p>选择合适评价指标：RMSE、准确率、召回率等</p>
+</blockquote>
+<p>3、确定评估方法</p>
+<blockquote>
+<p>验证集、K折交叉验证等</p>
+</blockquote>
+<p>4、准备数据</p>
+<p>5、建立模型并优化</p>
+<blockquote>
+<p>正则化、调节超参数</p>
+</blockquote>
+<h2 id="三、推荐文献"><a href="#三、推荐文献" class="headerlink" title="三、推荐文献"></a>三、推荐文献</h2><p>1、LECUN Y, BENGIO Y, HINTON G. Deep learning[J&#x2F;OL]. Nature, 2015, 521(7553): 436-444. <a target="_blank" rel="noopener" href="https://doi.org/10.1038/nature14539">https://doi.org/10.1038/nature14539</a>.</p>
+<p>2、RUMELHART D E, HINTON G E, WILLIAMS R J. Learning representations by back-propagating errors[J&#x2F;OL]. Nature, 1986, 323(6088): 533-536. <a target="_blank" rel="noopener" href="https://doi.org/10.1038/323533a0">https://doi.org/10.1038/323533a0</a>.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" rel="tag"># 分类算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/eaf5fa0b/" rel="prev" title="集成学习算法">
+                  <i class="fa fa-chevron-left"></i> 集成学习算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/b447d159/" rel="next" title="Machine Learning Guided Polyamide Membrane with Exceptional Solute–Solute Selectivity and Permeance">
+                  Machine Learning Guided Polyamide Membrane with Exceptional Solute–Solute Selectivity and Permeance <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hjie</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script><script src="/js/code-unfold.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.11/pdfobject.min.js","integrity":"sha256-N6JtCNwaYm6kizuG92UtOOXamRHPwu+V1yF10g3bu/c="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
